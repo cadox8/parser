@@ -1,16 +1,12 @@
-package es.ivan.parser;
+package es.ivan.parser.car;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
-import com.opencsv.exceptions.CsvValidationException;
-import es.ivan.parser.data.mysql.CocheCSV;
-import es.ivan.parser.data.mysql.CocheMySQL;
 import es.ivan.parser.utils.MySQL;
 import es.ivan.parser.utils.Oracle;
 import lombok.Getter;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -24,15 +20,13 @@ public class CarManager {
     private final MySQL mysql;
     private final Oracle oracle;
 
-    @Getter private final List<CocheMySQL> cocheMySQLS;
-    @Getter private final List<CocheCSV> cocheCSVS;
+    @Getter private final List<Coche> coches;
 
     public CarManager() {
-        this.mysql = new MySQL("localhost", "3306", "coches", "root", "");
+        this.mysql = new MySQL("localhost", "3306", "coches", "root", "123456");
         this.oracle = new Oracle("oracle.iesjulianmarias.es", "1521", "coches", "damd108", "damd108");
 
-        this.cocheMySQLS = new ArrayList<>();
-        this.cocheCSVS = new ArrayList<>();
+        this.coches = new ArrayList<>();
     }
 
     public void load() {
@@ -43,12 +37,17 @@ public class CarManager {
             e.printStackTrace();
         }
 
+        this.coches.forEach(System.out::println);
+
         try {
             this.loadCSV();
         } catch (IOException | CsvException e) {
             System.err.println("Error al cargar los datos del CSV");
             e.printStackTrace();
         }
+
+        System.out.println("\n\n\n");
+        this.coches.forEach(System.out::println);
 
 /*        try {
             this.testOracle();
@@ -63,7 +62,7 @@ public class CarManager {
         final ResultSet rs = statement.executeQuery();
 
         while (rs.next()) {
-            this.cocheMySQLS.add(new CocheMySQL(rs.getString("nombreCoche"), rs.getString("modelo"),
+            this.coches.add(new Coche(rs.getString("nombreCoche"), rs.getString("modelo"),
                     rs.getInt("year"), rs.getFloat("vMax"), rs.getInt("cilindrada")) );
         }
     }
@@ -71,7 +70,9 @@ public class CarManager {
     private void loadCSV() throws IOException, CsvException {
         // Load from CSV
         final CSVReader reader = new CSVReaderBuilder(new FileReader("./file1.csv")).withSkipLines(1).build();
-        reader.readAll().forEach(l -> this.cocheCSVS.add(new CocheCSV(l[0], l[1], Integer.parseInt(l[2]))));
+        reader.readAll().forEach(l -> {
+            this.coches.stream().filter(c -> c.getNombreCoche().equalsIgnoreCase(l[0]) && c.getYear() == Integer.parseInt(l[2])).findAny().ifPresent(coche -> coche.setColor(l[1]));
+        });
     }
 
     private void testOracle() throws SQLException, ClassNotFoundException {

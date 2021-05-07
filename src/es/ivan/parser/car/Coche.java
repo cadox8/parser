@@ -1,10 +1,11 @@
-package es.ivan.parser.data.mysql;
+package es.ivan.parser.car;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @ToString
-public class CocheMySQL {
+public class Coche {
 
     @Getter private final String nombreCoche;
     @Getter private final String modelo;
@@ -12,7 +13,9 @@ public class CocheMySQL {
     @Getter private final float vMax;
     @Getter private final int cilindrada;
 
-    public CocheMySQL(String nombreCoche, String modelo, int year, float vMax, int cilindrada) {
+    @Getter @Setter private String color;
+
+    public Coche(String nombreCoche, String modelo, int year, float vMax, int cilindrada) {
         this.nombreCoche = nombreCoche;
         this.modelo = modelo;
         this.year = year;

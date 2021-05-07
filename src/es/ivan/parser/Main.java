@@ -1,10 +1,9 @@
 package es.ivan.parser;
 
 import com.opencsv.exceptions.CsvException;
-import com.opencsv.exceptions.CsvValidationException;
+import es.ivan.parser.car.CarManager;
 
 import java.io.*;
-import java.sql.SQLException;
 
 public class Main {
 
@@ -22,11 +21,5 @@ public class Main {
 
         final CarManager carManager = new CarManager();
         carManager.load();
-
-        System.out.println("Coches MySQL");
-        carManager.getCocheMySQLS().forEach(System.out::println);
-
-        System.out.println("Coches CSV");
-        carManager.getCocheCSVS().forEach(System.out::println);
     }
 }
