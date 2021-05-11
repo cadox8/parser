@@ -48,8 +48,6 @@
             <version>5.4</version>
         </dependency>
 
-        <!-- Utils -->
-
         <!-- Lombok repo -->
         <dependency>
             <groupId>org.projectlombok</groupId>
