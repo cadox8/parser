@@ -89,11 +89,12 @@ public class CarManager {
                 "nombreCoche VARCHAR2(100), " +
                 "modelo VARCHAR2(100), " +
                 "year NUMBER(4), " +
+                "color VARCHAR2(50), " +
                 "vMax NUMBER(4), " +
                 "cilindrada NUMBER(5) " +
                 "CONSTRAINT coches_pk PRIMARY KEY(nombreCoche)"
                 + ")";
-        final String insertTable = "insert into coches (nombreCoche, model, year, vMAx, cilindrada) values (?, ?, ?, ?, ?)";
+        final String insertTable = "insert into coches (nombreCoche, modelo, year, color, vMax, cilindrada) values (?, ?, ?, ?, ?, ?)";
 
         final PreparedStatement statement = this.oracle.openOracleConnection().prepareStatement(dropTable);
         statement.executeQuery();
@@ -106,8 +107,9 @@ public class CarManager {
             insertStatement.setString(1, c.getNombreCoche());
             insertStatement.setString(2, c.getModelo());
             insertStatement.setInt(3, c.getYear());
-            insertStatement.setFloat(4, c.getVMax());
-            insertStatement.setInt(5, c.getCilindrada());
+            insertStatement.setString(4, c.getColor());
+            insertStatement.setFloat(5, c.getVMax());
+            insertStatement.setInt(6, c.getCilindrada());
             insertStatement.addBatch();
         }
     }
@@ -115,8 +117,9 @@ public class CarManager {
     private void createOracleCSV() throws IOException {
         System.out.println("Creando CSV con nuevos datos");
         final CSVWriter writer = new CSVWriter(new FileWriter("./file2.csv"));
-        writer.writeNext(new String[]{ "nombreCoche", "modelo", "year" });
-        this.coches.forEach(c -> writer.writeNext(new String[]{ c.getNombreCoche(), c.getModelo(), String.valueOf(c.getYear()) }));
+        writer.writeNext(new String[]{ "nombreCoche", "year", "cantidad" });
+        this.coches.forEach(c -> writer.writeNext(new String[]{ c.getNombreCoche(), String.valueOf(c.getYear()),
+                String.valueOf(this.coches.stream().filter(c2 -> c2.getNombreCoche().equalsIgnoreCase(c.getNombreCoche())).count()) }));
         writer.flush();
         writer.close();
     }
