@@ -4,13 +4,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class Oracle {
+public class Database {
 
     protected Connection connection;
 
     private final String user, database, password, port, hostname;
 
-    public Oracle(String hostname, String port, String database, String username, String password) {
+    public Database(String hostname, String port, String database, String username, String password) {
         this.hostname = hostname;
         this.port = port;
         this.database = database;
@@ -26,7 +26,14 @@ public class Oracle {
         return connection;
     }
 
-    public Connection openConnection() throws SQLException, ClassNotFoundException {
+    public Connection openMySQLConnection() throws SQLException, ClassNotFoundException {
+        if (checkConnection()) return connection;
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        connection = DriverManager.getConnection("jdbc:mysql://" + this.hostname + ":" + this.port + "/" + this.database + "?autoReconnect=true&serverTimezone=UTC", this.user, this.password);
+        return connection;
+    }
+
+    public Connection openOracleConnection() throws SQLException, ClassNotFoundException {
         if (checkConnection()) return connection;
         Class.forName ("oracle.jdbc.driver.OracleDriver");
         connection = DriverManager.getConnection("jdbc:oracle:thin:@" + this.hostname + ":" + this.port + ":orcl", this.user, this.password);

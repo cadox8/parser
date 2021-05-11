@@ -3,10 +3,8 @@ package es.ivan.parser.car;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.CSVWriter;
-import com.opencsv.CSVWriterBuilder;
 import com.opencsv.exceptions.CsvException;
-import es.ivan.parser.utils.MySQL;
-import es.ivan.parser.utils.Oracle;
+import es.ivan.parser.utils.Database;
 import lombok.Getter;
 
 import java.io.FileReader;
@@ -21,14 +19,14 @@ import java.util.Properties;
 
 public class CarManager {
 
-    private final MySQL mysql;
-    private final Oracle oracle;
+    private final Database mysql;
+    private final Database oracle;
 
     @Getter private final List<Coche> coches;
 
     public CarManager(Properties prop) {
-        this.mysql = new MySQL(prop.getProperty("mysql.host"), prop.getProperty("mysql.port"), prop.getProperty("mysql.database"), prop.getProperty("mysql.user"), prop.getProperty("mysql.password"));
-        this.oracle = new Oracle(prop.getProperty("oracle.host"), prop.getProperty("oracle.port"), prop.getProperty("oracle.database"), prop.getProperty("oracle.user"), prop.getProperty("oracle.password"));
+        this.mysql = new Database(prop.getProperty("mysql.host"), prop.getProperty("mysql.port"), prop.getProperty("mysql.database"), prop.getProperty("mysql.user"), prop.getProperty("mysql.password"));
+        this.oracle = new Database(prop.getProperty("oracle.host"), prop.getProperty("oracle.port"), prop.getProperty("oracle.database"), prop.getProperty("oracle.user"), prop.getProperty("oracle.password"));
 
         this.coches = new ArrayList<>();
     }
@@ -66,7 +64,7 @@ public class CarManager {
     private void loadMySQL() throws SQLException, ClassNotFoundException {
         // Load from MySQL
         System.out.println("Cargando datos de MySQL");
-        final PreparedStatement statement = this.mysql.openConnection().prepareStatement("SELECT * FROM `coches`");
+        final PreparedStatement statement = this.mysql.openMySQLConnection().prepareStatement("SELECT * FROM `coches`");
         final ResultSet rs = statement.executeQuery();
 
         while (rs.next()) {
@@ -97,12 +95,12 @@ public class CarManager {
                 + ")";
         final String insertTable = "insert into coches (nombreCoche, model, year, vMAx, cilindrada) values (?, ?, ?, ?, ?)";
 
-        final PreparedStatement statement = this.oracle.openConnection().prepareStatement(dropTable);
+        final PreparedStatement statement = this.oracle.openOracleConnection().prepareStatement(dropTable);
         statement.executeQuery();
         statement.executeUpdate(createTable);
 
         // Insert values
-        final PreparedStatement insertStatement = this.oracle.openConnection().prepareStatement(insertTable);
+        final PreparedStatement insertStatement = this.oracle.openOracleConnection().prepareStatement(insertTable);
 
         for (Coche c : this.coches) {
             insertStatement.setString(1, c.getNombreCoche());
