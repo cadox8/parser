@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>C:/Users/cadox/Documents/Proyectos/parser</OriginalElement>
+  <nodes>
+    <node x="-455.0" y="-35.0">es.ivan.parser.car.Coche</node>
+    <node x="-143.375" y="451.0">es.ivan.parser.car.CarManager</node>
+    <node x="-98.0" y="-37.0">es.ivan.parser.utils.Database</node>
+    <node x="153.125" y="477.0">es.ivan.parser.Launcher</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="es.ivan.parser.car.CarManager" target="es.ivan.parser.car.Coche" relationship="TO_MANY">
+      <point x="-68.25" y="-128.0" />
+      <point x="-120.625" y="396.0" />
+      <point x="-397.0" y="396.0" />
+      <point x="-58.0" y="183.0" />
+    </edge>
+    <edge source="es.ivan.parser.car.CarManager" target="es.ivan.parser.utils.Database" relationship="TO_ONE">
+      <point x="68.25" y="-128.0" />
+      <point x="15.875" y="396.0" />
+      <point x="117.25" y="396.0" />
+      <point x="71.75" y="150.0" />
+    </edge>
+    <edge source="es.ivan.parser.car.CarManager" target="es.ivan.parser.car.Coche" relationship="CREATE">
+      <point x="-22.75" y="-128.0" />
+      <point x="-75.125" y="386.0" />
+      <point x="-281.0" y="386.0" />
+      <point x="58.0" y="183.0" />
+    </edge>
+    <edge source="es.ivan.parser.Launcher" target="es.ivan.parser.car.CarManager" relationship="CREATE">
+      <point x="0.0" y="-39.5" />
+      <point x="227.625" y="700.0" />
+      <point x="-52.375" y="700.0" />
+      <point x="0.0" y="128.0" />
+    </edge>
+    <edge source="es.ivan.parser.car.CarManager" target="es.ivan.parser.utils.Database" relationship="CREATE">
+      <point x="22.75" y="-128.0" />
+      <point x="-29.625" y="396.0" />
+      <point x="-26.25" y="396.0" />
+      <point x="-71.75" y="150.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="1.0" showDependencies="true" x="-76.0" y="336.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
